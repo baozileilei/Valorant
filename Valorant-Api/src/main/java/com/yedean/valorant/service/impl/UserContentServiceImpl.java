@@ -28,7 +28,6 @@ public class UserContentServiceImpl implements UserContentService {
         //构造请求header
         HttpHeaders header = ValorantUtils.createAuthHeader(accessToken, entitleToken);
 
-
         //构造body
         JSONArray array = new JSONArray();
         array.add(userId);

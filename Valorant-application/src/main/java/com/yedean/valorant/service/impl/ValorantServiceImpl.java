@@ -7,6 +7,7 @@ import com.yedean.valorant.service.RedisService;
 import com.yedean.valorant.service.UserContentService;
 import com.yedean.valorant.service.ValorantService;
 import org.springframework.stereotype.Service;
+import com.yedean.valorant.service.PlayerInfoService;
 
 import javax.annotation.Resource;
 import java.util.Objects;
@@ -20,6 +21,8 @@ public class ValorantServiceImpl implements ValorantService {
     RedisService redisService;
     @Resource
     UserContentService userContentService;
+    @Resource
+    PlayerInfoService playerInfoService;
 
     @Override
     public RSO login(String username, String password) {
@@ -38,12 +41,22 @@ public class ValorantServiceImpl implements ValorantService {
 
     @Override
     public PlayerInfo getPlayerInfo(String username) {
+
+        //先从Es那边拿取信息
+        PlayerInfo info = playerInfoService.findByUserName(username);
+        if (info != null) {
+            return info;
+        }
+
         RSO rso = redisService.getToken(username);
 
         String userId = rso.getUserId();
         String accessToken = rso.getAccessToken();
         String entitlementsToken = rso.getEntitlementsToken();
 
-        return userContentService.getPlayerInfo(userId,accessToken,entitlementsToken);
+        PlayerInfo playerInfo = userContentService.getPlayerInfo(userId, accessToken, entitlementsToken);
+        playerInfoService.save(playerInfo);
+
+        return playerInfo;
     }
 }

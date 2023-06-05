@@ -1,4 +1,4 @@
-package service;
+package com.yedean.valorant.service;
 
 import com.yedean.valorant.pojo.PlayerInfo;
 
@@ -8,5 +8,4 @@ public interface PlayerInfoService {
 
     PlayerInfo findByUserName(String userName);
 
-    void updateById(PlayerInfo info);
 }

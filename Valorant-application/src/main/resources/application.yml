@@ -13,6 +13,7 @@ spring:
     #redis 端口
     port: 6379
     #redis 密码 默认为空
+    password: yedean7717
     # 链接超时时间
     timeout: 10s
   elasticsearch:
